@@ -22,21 +22,21 @@ namespace ApiEmpresa.Repositories
         {
             using var conn = GetConnection();
             return await conn.QueryAsync<Empresa>(
-                "SELECT * FROM Empresa WHERE ativo = true");
+                "SELECT * FROM empresa WHERE ativo = true");
         }
 
         public async Task<Empresa?> GetByIdAsync(int id)
         {
             using var conn = GetConnection();
             return await conn.QueryFirstOrDefaultAsync<Empresa>(
-                "SELECT * FROM Empresa WHERE id = @Id AND ativo = true",
+                "SELECT * FROM empresa WHERE id = @Id AND ativo = true",
                 new { Id = id });
         }
 
         public async Task<int> CreateAsync(CreateEmpresaDto dto)
         {
             using var conn = GetConnection();
-            var sql = @"INSERT INTO Empresa 
+            var sql = @"INSERT INTO empresa 
                 (nome, cnpj, telefone, email, cep, logradouro, numero, 
                  bairro, cidade, estado, latitude, longitude, ativo)
                 VALUES 
@@ -49,7 +49,7 @@ namespace ApiEmpresa.Repositories
         public async Task<bool> UpdateAsync(int id, UpdateEmpresaDto dto)
         {
             using var conn = GetConnection();
-            var sql = @"UPDATE Empresa SET
+            var sql = @"UPDATE empresa SET
                 nome = @Nome, cnpj = @Cnpj, telefone = @Telefone,
                 email = @Email, cep = @Cep, logradouro = @Logradouro,
                 numero = @Numero, bairro = @Bairro, cidade = @Cidade,
@@ -80,7 +80,7 @@ namespace ApiEmpresa.Repositories
         {
             using var conn = GetConnection();
             var rows = await conn.ExecuteAsync(
-                "UPDATE Empresa SET ativo = false WHERE id = @Id",
+                "UPDATE empresa SET ativo = false WHERE id = @Id",
                 new { Id = id });
             return rows > 0;
         }
@@ -107,7 +107,7 @@ namespace ApiEmpresa.Repositories
 
             if (!campos.Any()) return false; // nenhum campo enviado
 
-            var sql = $"UPDATE Empresa SET {string.Join(", ", campos)} WHERE id = @Id";
+            var sql = $"UPDATE empresa SET {string.Join(", ", campos)} WHERE id = @Id";
 
             using var conn = GetConnection();
             var rows = await conn.ExecuteAsync(sql, parametros);
